@@ -9,16 +9,28 @@ Arguments:
   PATH_TO_REPO   Local repository path to mount at /home/codex/src
 
 Options:
+  --auth-dir PATH   Host directory for Codex auth state (default: ./home_codex)
   --shell        Run /bin/bash inside the container instead of Codex
   -h, --help     Show this help message
 EOF
 }
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+auth_dir="$script_dir/home_codex"
 shell=false
 repo_path=""
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
+        --auth-dir)
+            if [ "$#" -lt 2 ]; then
+                echo "error: --auth-dir requires a path" >&2
+                usage
+                exit 1
+            fi
+            auth_dir="$2"
+            shift
+            ;;
         --shell)
             shell=true
             ;;
@@ -53,13 +65,14 @@ if [ ! -d "$repo_path" ]; then
     exit 1
 fi
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_path="$(cd "$repo_path" && pwd)"
 
-if [ ! -d "$script_dir/home_codex" ]; then
-    echo "error: missing $script_dir/home_codex; follow auth.md to create it first" >&2
+if [ ! -d "$auth_dir" ]; then
+    echo "error: missing auth directory: $auth_dir" >&2
+    echo "run ./auth.sh first, or pass --auth-dir PATH" >&2
     exit 1
 fi
+auth_dir="$(cd "$auth_dir" && pwd)"
 
 container_command=()
 if [ "$shell" = true ]; then
@@ -67,7 +80,7 @@ if [ "$shell" = true ]; then
 fi
 
 docker run -it --rm \
-    -v "$script_dir/home_codex:/home/codex/.codex" \
+    -v "$auth_dir:/home/codex/.codex" \
     -v "$repo_path:/home/codex/src" \
     codex:latest \
     "${container_command[@]}"

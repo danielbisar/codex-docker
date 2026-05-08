@@ -8,11 +8,10 @@ user, and starts Codex from `/home/codex/src`.
 
 - Docker
 - A local checkout of this repository
-- Codex authentication state, if you want to reuse an existing login
 
-## Build
+## Quick Start
 
-Build the image with the helper script:
+1. Build the image:
 
 ```bash
 ./build.sh
@@ -20,50 +19,67 @@ Build the image with the helper script:
 
 The script tags the image as both `codex:0.129.0` and `codex:latest`.
 
-You can also build directly:
+2. Authenticate Codex:
 
 ```bash
-docker build -t codex:latest .
+./auth.sh
 ```
 
-## Authenticate
+The script creates `home_codex/`, mounts it at `/home/codex/.codex` inside the
+container, and runs `codex login --device-auth`. Follow the device-auth
+instructions printed by Codex. When the command exits, the saved authentication
+state remains in `home_codex/` on the host.
 
-Follow `auth.md` to create a local `home_codex/` directory containing Codex
-authentication state. That directory is mounted into containers as
-`/home/codex/.codex`.
+To use a different auth directory:
 
-Treat `home_codex/` as sensitive local state. It can contain credentials, logs,
-cache files, and other runtime data, and should not be committed (therefore ignored by Git)
+```bash
+./auth.sh --auth-dir /path/to/codex-auth
+```
 
-## Run Codex Against a Repository
-
-After building the image and creating `home_codex/`, run Codex against another
-local repository with:
+3. Run Codex against a repository:
 
 ```bash
 ./run.sh /path/to/repo
 ```
 
-The script mounts:
-
-- `home_codex/` to `/home/codex/.codex`
-- The target repository to `/home/codex/src`
-
-Codex starts with:
+To use a different auth directory when running:
 
 ```bash
-codex --sandbox danger-full-access
+./run.sh --auth-dir /path/to/codex-auth /path/to/repo
 ```
 
-To enter a shell in the container instead, run:
+To enter a shell in the container instead of starting Codex:
 
 ```bash
 ./run.sh --shell /path/to/repo
+```
+
+`run.sh` mounts:
+
+- The auth directory to `/home/codex/.codex`
+- The target repository to `/home/codex/src`
+
+## Direct Docker Commands
+
+Build the image directly:
+
+```bash
+docker build -t codex:latest .
+```
+
+Open a shell for inspecting the image:
+
+```bash
+docker run -it --rm --entrypoint sh codex:latest
 ```
 
 ## Files
 
 - `Dockerfile`: defines the Codex container image.
 - `build.sh`: builds and tags the image.
-- `run.sh`: runs Codex with authentication state and a mounted repository.
-- `auth.md`: documents the manual device-auth setup flow.
+- `auth.sh`: runs Codex device authentication with auth state mounted to `home_codex/`.
+- `run.sh`: runs Codex or `/bin/bash` with authentication state and a mounted repository.
+- `home_codex/`: local runtime state for Codex credentials, cache, logs, and configuration.
+
+Treat `home_codex/` and any custom auth directory as sensitive local state. Do
+not commit credentials, copied Codex state, or generated SQLite/log files.
