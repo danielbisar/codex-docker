@@ -20,4 +20,6 @@ RUN useradd --create-home --shell /bin/bash codex \
 USER codex
 WORKDIR /home/codex/src
 
+# TODO configure git user/email
+
 CMD [ "codex", "--sandbox", "danger-full-access" ]
