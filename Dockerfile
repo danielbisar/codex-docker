@@ -16,10 +16,11 @@ RUN apt-get update \
 # user setup
 RUN userdel --remove node
 RUN useradd --create-home --shell /bin/bash codex \
-    && mkdir /home/codex/src
+ && mkdir /home/codex/src
 USER codex
 WORKDIR /home/codex/src
 
-# TODO configure git user/email
+RUN git config --global user.name "codex docker" \
+ && git config --global user.name "codex@mail.no"
 
 CMD [ "codex", "--sandbox", "danger-full-access" ]
