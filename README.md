@@ -55,6 +55,12 @@ Codex starts with:
 codex --sandbox danger-full-access
 ```
 
+To enter a shell in the container instead, run:
+
+```bash
+./run.sh --shell /path/to/repo
+```
+
 ## Files
 
 - `Dockerfile`: defines the Codex container image.
