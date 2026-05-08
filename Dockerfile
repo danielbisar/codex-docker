@@ -20,7 +20,7 @@ RUN useradd --create-home --shell /bin/bash codex \
 USER codex
 WORKDIR /home/codex/src
 
-RUN git config --global user.name "codex docker" \
- && git config --global user.name "codex@mail.no"
+RUN git config --global user.name "Codex CLI" \
+ && git config --global user.email "codex@no-mail.com"
 
 CMD [ "codex", "--sandbox", "danger-full-access" ]
