@@ -1,4 +1,20 @@
 #!/bin/bash
+set -euo pipefail
 
-# TODO autodetect version number of codex without npm
-docker build -t codex:0.129.0 -t codex:latest .
+image="codex"
+
+docker build -t "$image:latest" .
+
+version="$(
+    docker run --rm "$image:latest" codex --version \
+        | awk '$1 == "codex-cli" { print $2 }'
+)"
+
+if [ -z "$version" ]; then
+    echo "error: could not determine Codex version from image" >&2
+    exit 1
+fi
+
+docker tag "$image:latest" "$image:$version"
+
+echo "Built $image:latest and $image:$version"

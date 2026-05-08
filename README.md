@@ -17,7 +17,8 @@ user, and starts Codex from `/home/codex/src`.
 ./build.sh
 ```
 
-The script tags the image as both `codex:0.129.0` and `codex:latest`.
+The script tags the image as `codex:latest`, reads the installed Codex version
+from inside the image, and adds a matching `codex:<version>` tag.
 
 2. Authenticate Codex:
 
