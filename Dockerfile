@@ -1,8 +1,10 @@
 FROM node:24-slim
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN npm install -g @openai/codex
-
-
 
 # Docker has specific installation instructions for each operating system.
 # Please refer to the official documentation at https://docker.com/get-started/
