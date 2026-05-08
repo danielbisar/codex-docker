@@ -17,8 +17,13 @@ user, and starts Codex from `/home/codex/src`.
 ./build.sh
 ```
 
-The script tags the image as `codex:latest`, reads the installed Codex version
-from inside the image, and adds a matching `codex:<version>` tag.
+The script pulls the latest `node:24-slim` base image, tags the image as
+`codex:latest`, reads the installed Codex version from inside the image, and
+adds a matching `codex:<version>` tag. To skip the base-image pull, run
+`./build.sh --no-pull`.
+
+To change the base image, update `base_image` in `build.sh`; the script passes
+that value into the Dockerfile.
 
 2. Authenticate Codex:
 

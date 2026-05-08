@@ -5,7 +5,7 @@
 This repository defines a Docker image for running Codex in a container.
 
 - `Dockerfile` installs `@openai/codex` and devtools and uses codex user.
-- `build.sh` builds the image, reads the installed Codex version from the image, and tags it as both `codex:<version>` and `codex:latest`.
+- `build.sh` defines the base image, pulls it by default, builds the image, reads the installed Codex version from the image, and tags it as both `codex:<version>` and `codex:latest`.
 - `auth.sh` runs Codex device authentication with auth state mounted to `home_codex/`.
 - `README.md` documents the build, authentication, and run workflow.
 - `home_codex/` is local runtime state for Codex credentials, cache, logs, and configuration. It is ignored by Git and should not be committed.
@@ -15,6 +15,7 @@ There are no application source modules, tests, or assets beyond the container s
 ## Build, Test, and Development Commands
 
 - `./build.sh`: build the Docker image using the repository `Dockerfile`.
+- `./build.sh --no-pull`: build the Docker image without first pulling `node:24-slim`.
 - `./auth.sh`: run Codex device authentication and save state into `home_codex/`.
 - `./run.sh PATH_TO_REPO`: run Codex in the container with `home_codex/` and the target repository mounted.
 - `./run.sh --auth-dir PATH_TO_AUTH PATH_TO_REPO`: run Codex using a custom auth-state directory.

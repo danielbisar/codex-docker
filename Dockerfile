@@ -1,4 +1,5 @@
-FROM node:24-slim
+ARG BASE_IMAGE=node:24-slim
+FROM ${BASE_IMAGE}
 
 # ca-certificates for device-code auth
 RUN apt-get update \
