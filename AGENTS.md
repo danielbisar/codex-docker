@@ -14,6 +14,8 @@ There are no application source modules, tests, or assets beyond the container s
 ## Build, Test, and Development Commands
 
 - `./build.sh`: build the Docker image using the repository `Dockerfile`.
+- `./run.sh PATH_TO_REPO`: run Codex in the container with `home_codex/` and the target repository mounted.
+- `./run.sh --shell PATH_TO_REPO`: open `/bin/bash` in the container with the same mounts instead of starting Codex.
 - `docker build -t codex:latest .`: build the image directly when testing Dockerfile changes.
 - `docker run -it --rm codex:latest`: start Codex with the default container command.
 - `docker run -it --rm --entrypoint sh codex:latest`: open a shell for inspecting the image or running authentication setup.
