@@ -22,6 +22,12 @@ USER codex
 WORKDIR /home/codex/src
 
 RUN git config --global user.name "Codex CLI" \
- && git config --global user.email "codex@no-mail.com"
+ && git config --global user.email "codex@no-mail.com" \
+ && git config --global pull.rebase true \
+ && git config --global rebase.autoStash true \
+ && git config --global branch.master.rebase false \
+ && git config --global branch.master.mergeoptions --ff-only \
+ && git config --global branch.main.rebase false \
+ && git config --global branch.main.mergeoptions --ff-only
 
 CMD [ "codex", "--sandbox", "danger-full-access" ]
