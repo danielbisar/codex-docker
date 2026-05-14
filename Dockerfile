@@ -11,7 +11,7 @@ RUN npm install -g @openai/codex
 # additional software aka dev tools
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-        git ripgrep \
+        curl git ripgrep \
     && rm -rf /var/lib/apt/lists/*
 
 # user setup
